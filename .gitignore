@@ -1,1 +1,5 @@
 ./XOR_ANN
+./build/XOR_ANN
+./draft
+./include/*.gch
+./src/*.o

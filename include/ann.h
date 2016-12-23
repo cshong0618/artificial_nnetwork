@@ -17,6 +17,11 @@ namespace ann
 {
     class ANN
     {
+    private:
+        typedef std::vector<double> node;
+        typedef std::vector<node> layer;
+        typedef std::vector<layer> network;
+
     public:
 // Constructors
         ANN(int layers)
@@ -64,12 +69,39 @@ namespace ann
         bool AddWeight(int layer, int node, const double& weight);
         bool SetWeight(int layer, int node, int n, const double& weight);
 
+        inline std::vector<node> GetLayer(int layer) const
+        {
+            if (layer >= 0 && layer < (int)nnetwork.size())
+            {
+                return this->nnetwork.at(layer);
+            }
+            else
+            {
+                throw std::range_error("Out of range");
+            }
+        }
+
+        inline std::vector<double> GetNode(int layer, int node)
+        {
+            if(layer >= 0 && layer < (int)nnetwork.size())
+            {
+                if(node >= 0 && node < (int)nnetwork.at(layer).size())
+                {
+                    return nnetwork.at(layer).at(node);
+                }
+            }
+            else
+            {
+                throw std::range_error("Out of range");
+            }
+        }
+
         void AddTrainingSet(const std::vector<double>& input, const std::vector<double>& output);
-        inline std::vector<double>& GetTrainingSet(const std::vector<double>&key)
+        inline std::vector<double> GetTrainingSet(const std::vector<double>&key) const
         {
             if(training_set.find(key) != training_set.end())
             {
-                return training_set[key];
+                return training_set.at(key);
             }
             else
             {
@@ -84,11 +116,13 @@ namespace ann
         void SetErrorMargin(const double& error_margin);
         inline double GetErrorMargin() const {return this->error_margin;}
 
-        inline bool ErrorInMargin() const
+        inline bool ErrorInMargin(const std::vector<double>& input,
+                                  const std::vector<double>& output) const
         {
-            for(size_t i = 0; i < target_outputs.size(); i++)
+            std::vector<double> actual = GetTrainingSet(input);
+            for(int i = 0; i < (int)actual.size(); i++)
             {
-                if (fabs(target_outputs.at(i) - outputs.at(i)) > error_margin)
+                if(fabs(actual.at(i) - output.at(i)) > error_margin)
                 {
                     return false;
                 }
@@ -117,7 +151,7 @@ namespace ann
                     os << "--Node " << j << ": ";
                     for(auto node : obj.nnetwork.at(i).at(j))
                         os << node << " ";
-                    os << "\n";
+                    os << "\n"; 
                 }
                 os << "\n";
             }
@@ -127,15 +161,8 @@ namespace ann
 
 
     private:
-        typedef std::vector<double> node;
-        typedef std::vector<node> layer;
-        typedef std::vector<layer> network;
-
         // Network data
         network nnetwork;
-        std::vector<double> inputs;
-        std::vector<double> outputs;
-        std::vector<double> target_outputs;
         std::map<std::vector<double>, std::vector<double>> training_set;
 
         // Calculation data

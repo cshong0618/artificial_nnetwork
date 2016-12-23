@@ -38,10 +38,6 @@ bool ann::ANN::AddWeight(int layer, int node, const double& weight)
         if(node >= 0 && node < (int)nnetwork.at(layer).size())
         {
             nnetwork.at(layer).at(node).push_back(weight);
-            if(layer == 0)
-            {
-                inputs.push_back(0);
-            }
             return true;
         }
     }
