@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/shaong/Documents/Programming/xor_ann/include/ann.h
+algorithm
+-
+cmath
+-
+fstream
+-
+functional
+-
+iomanip
+-
+iostream
+-
+map
+-
+ostream
+-
+stdexcept
+-
+string
+-
+vector
+-
+
+/home/shaong/Documents/Programming/xor_ann/src/ann.cpp
+../include/ann.h
+/home/shaong/Documents/Programming/xor_ann/include/ann.h
+
+/home/shaong/Documents/Programming/xor_ann/src/main.cpp
+iostream
+-
+vector
+-
+../include/ann.h
+/home/shaong/Documents/Programming/xor_ann/include/ann.h
+
