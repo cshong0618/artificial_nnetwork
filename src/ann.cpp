@@ -106,7 +106,7 @@ double ann::ANN::ForwardPropagate(int layer, int node, std::vector<double> input
     {
         for(size_t i = 0; i < inputs.size(); i++)
         {
-            net += nnetwork.at(layer).at(node).at(i) * inputs.at(i);
+            net += (nnetwork.at(layer).at(node).at(i) * inputs.at(i));
         }
     }
     catch (std::exception e)

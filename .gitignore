@@ -3,3 +3,7 @@
 ./draft
 ./include/*.gch
 ./src/*.o
+*.gch
+*.o
+./build/*
+!./build/CMakeLists.txt

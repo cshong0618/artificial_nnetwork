@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "../include/ann.h"
+#include "../include/propagator.h"
 
 int main()
 {
@@ -9,6 +10,9 @@ int main()
     nnetwork.AddNode(0);
     nnetwork.AddWeight(0, 0, 0.5);
     nnetwork.AddWeight(0, 0, 0.5);
+    nnetwork.AddNode(0);
+    nnetwork.AddWeight(0, 1, 0.2);
+    nnetwork.AddWeight(0, 1, 0.2);
 
     std::cout << nnetwork;
 
@@ -35,5 +39,35 @@ int main()
         std::cout << i << " ";
     }
     std::cout << std::endl;
+    try
+    {
+    std::cout << "Forward propagate 1: " << nnetwork.ForwardPropagate(0, 0, in) << "\n";
+    std::cout << "Forward propagate 2: " << nnetwork.ForwardPropagate(0, 1, in) << "\n";
+    }
+    catch (std::exception e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+    ann::Propagator propagator(nnetwork);
+    propagator.SetForwardPropogateFunction([&](int layer, int node, std::vector<double> inputs)
+    {
+        double net = 0.0;
+        try
+        {
+            for(size_t i = 0; i < inputs.size(); i++)
+            {
+                net += (propagator.GetNNetwork().GetWeight(layer, node, i) * inputs.at(i) * 2);
+            }
+        }
+        catch (std::exception e)
+        {
+            throw e;
+        }
+
+        return net;
+    });
+    std::cout << "Propagator forward propagate: " << propagator.ForwardPropagate(0, 0, in) << "\n";
+    std::cout << "Propagator forward propagate: " << propagator.ForwardPropagate(0, 1, in) << "\n";
+
     return 0;
 }

@@ -177,6 +177,33 @@ home/shaong/Documents/Programming/xor_ann/src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/XOR_ANN.dir/build.make CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/main.cpp.s
 .PHONY : home/shaong/Documents/Programming/xor_ann/src/main.cpp.s
 
+home/shaong/Documents/Programming/xor_ann/src/propagator.o: home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.o
+
+.PHONY : home/shaong/Documents/Programming/xor_ann/src/propagator.o
+
+# target to build an object file
+home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.o:
+	$(MAKE) -f CMakeFiles/XOR_ANN.dir/build.make CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.o
+.PHONY : home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.o
+
+home/shaong/Documents/Programming/xor_ann/src/propagator.i: home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.i
+
+.PHONY : home/shaong/Documents/Programming/xor_ann/src/propagator.i
+
+# target to preprocess a source file
+home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.i:
+	$(MAKE) -f CMakeFiles/XOR_ANN.dir/build.make CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.i
+.PHONY : home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.i
+
+home/shaong/Documents/Programming/xor_ann/src/propagator.s: home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.s
+
+.PHONY : home/shaong/Documents/Programming/xor_ann/src/propagator.s
+
+# target to generate assembly for a file
+home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.s:
+	$(MAKE) -f CMakeFiles/XOR_ANN.dir/build.make CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.s
+.PHONY : home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -192,6 +219,9 @@ help:
 	@echo "... home/shaong/Documents/Programming/xor_ann/src/main.o"
 	@echo "... home/shaong/Documents/Programming/xor_ann/src/main.i"
 	@echo "... home/shaong/Documents/Programming/xor_ann/src/main.s"
+	@echo "... home/shaong/Documents/Programming/xor_ann/src/propagator.o"
+	@echo "... home/shaong/Documents/Programming/xor_ann/src/propagator.i"
+	@echo "... home/shaong/Documents/Programming/xor_ann/src/propagator.s"
 .PHONY : help
 
 

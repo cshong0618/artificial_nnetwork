@@ -96,6 +96,24 @@ namespace ann
             }
         }
 
+        inline double GetWeight(int layer, int node, int n) const
+        {
+            if(layer >= 0 && layer < (int)nnetwork.size())
+            {
+                if(node >= 0 && node < (int)nnetwork.at(layer).size())
+                {
+                    if(n >= 0 && n < (int)nnetwork.at(layer).at(node).size())
+                    {
+                        return nnetwork.at(layer).at(node).at(n);
+                    }
+                }
+            }
+            else
+            {
+                throw std::range_error("Out of range");
+            }
+        }
+
         void AddTrainingSet(const std::vector<double>& input, const std::vector<double>& output);
         inline std::vector<double> GetTrainingSet(const std::vector<double>&key) const
         {
@@ -137,7 +155,7 @@ namespace ann
         double ForwardPropagate(int layer, int node, std::vector<double> inputs);
         double FinalBackwardPropagate(double net, double actual, double target);
         void BackwardPropagate();
-
+        double BackwardPropagate(int layer, int node, double p_net, double actual);
 // Operators
         friend std::ostream& operator<<(std::ostream &os, const ANN& obj)
         {
@@ -151,7 +169,7 @@ namespace ann
                     os << "--Node " << j << ": ";
                     for(auto node : obj.nnetwork.at(i).at(j))
                         os << node << " ";
-                    os << "\n"; 
+                    os << "\n";
                 }
                 os << "\n";
             }

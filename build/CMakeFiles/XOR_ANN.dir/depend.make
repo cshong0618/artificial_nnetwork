@@ -5,5 +5,10 @@ CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/ann.cpp.o: 
 CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/ann.cpp.o: /home/shaong/Documents/Programming/xor_ann/src/ann.cpp
 
 CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/main.cpp.o: /home/shaong/Documents/Programming/xor_ann/include/ann.h
+CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/main.cpp.o: /home/shaong/Documents/Programming/xor_ann/include/propagator.h
 CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/main.cpp.o: /home/shaong/Documents/Programming/xor_ann/src/main.cpp
+
+CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.o: /home/shaong/Documents/Programming/xor_ann/include/ann.h
+CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.o: /home/shaong/Documents/Programming/xor_ann/include/propagator.h
+CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.o: /home/shaong/Documents/Programming/xor_ann/src/propagator.cpp
 

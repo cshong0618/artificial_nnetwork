@@ -30,6 +30,16 @@ string
 vector
 -
 
+/home/shaong/Documents/Programming/xor_ann/include/propagator.h
+ann.h
+/home/shaong/Documents/Programming/xor_ann/include/ann.h
+cmath
+-
+functional
+-
+vector
+-
+
 /home/shaong/Documents/Programming/xor_ann/src/ann.cpp
 ../include/ann.h
 /home/shaong/Documents/Programming/xor_ann/include/ann.h
@@ -41,4 +51,10 @@ vector
 -
 ../include/ann.h
 /home/shaong/Documents/Programming/xor_ann/include/ann.h
+../include/propagator.h
+/home/shaong/Documents/Programming/xor_ann/include/propagator.h
+
+/home/shaong/Documents/Programming/xor_ann/src/propagator.cpp
+../include/propagator.h
+/home/shaong/Documents/Programming/xor_ann/include/propagator.h
 

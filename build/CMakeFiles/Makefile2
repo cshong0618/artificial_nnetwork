@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = /home/shaong/Documents/Programming/xor_ann/build
 CMakeFiles/XOR_ANN.dir/all:
 	$(MAKE) -f CMakeFiles/XOR_ANN.dir/build.make CMakeFiles/XOR_ANN.dir/depend
 	$(MAKE) -f CMakeFiles/XOR_ANN.dir/build.make CMakeFiles/XOR_ANN.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/shaong/Documents/Programming/xor_ann/build/CMakeFiles --progress-num=1,2,3 "Built target XOR_ANN"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/shaong/Documents/Programming/xor_ann/build/CMakeFiles --progress-num=1,2,3,4 "Built target XOR_ANN"
 .PHONY : CMakeFiles/XOR_ANN.dir/all
 
 # Include target in all.
@@ -76,7 +76,7 @@ all: CMakeFiles/XOR_ANN.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/XOR_ANN.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/shaong/Documents/Programming/xor_ann/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/shaong/Documents/Programming/xor_ann/build/CMakeFiles 4
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/XOR_ANN.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/shaong/Documents/Programming/xor_ann/build/CMakeFiles 0
 .PHONY : CMakeFiles/XOR_ANN.dir/rule
