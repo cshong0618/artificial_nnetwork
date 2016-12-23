@@ -49,20 +49,41 @@ double ann::Propagator::ForwardPropagate(int layer, int node, std::vector<double
     return forward_propagate(layer, node, input);
 }
 
-std::vector<double> ann::Propagator::AutoForwardPropagate(std::vector<double> input)
+ann::node_network ann::Propagator::AutoForwardPropagate(std::vector<double> input)
 {
-    std::vector<double> temp;
+    ann::node_network temp;
     for(int i = 0; i < nnetwork.GetLayerCount(); i++)
     {
-        temp.clear();
-        for(int j = 0; j <nnetwork.GetLayer(i).size(); j++)
+        temp.push_back(ann::node_layer());
+        for(int j = 0; j < nnetwork.GetLayer(i).size(); j++)
         {
-            temp.push_back(nnetwork.ForwardPropagate(i, j, input));
+            temp.at(i).push_back(nnetwork.ForwardPropagate(i, j, input));
         }
-        input = temp;
+        input = temp.at(i);
     }
 
     return temp;
+}
+
+void ann::Propagator::SetBackwardPropagateFunction(std::function<double (std::function<double (const double &, const double &)>, const double &, const double &, const double &)> backward_propagate)
+{
+    this->backward_propagate = backward_propagate;
+}
+
+void ann::Propagator::ResetBackwardPropagateFunction()
+{
+    this->backward_propagate = [&](std::function<double(const double& a, const double& b)> f,
+                                   const double& f_a,
+                                   const double& f_b,
+                                   const double& net)
+    {
+        return this->nnetwork.GetLearningRate() * f(f_a, f_b) * ActivationFunction(net);
+    };
+}
+
+double ann::Propagator::BackwardPropagate(std::function<double (const double &, const double &)> s_change, const double &_param_1, const double &_param_2, const double &net) const
+{
+    return this->backward_propagate(s_change, _param_1, _param_2, net);
 }
 
 void ann::Propagator::SetSmallChangeFunction(std::function<double(const double&, const double&)> f)

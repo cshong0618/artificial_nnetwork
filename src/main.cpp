@@ -85,12 +85,16 @@ int main()
 
     std::vector<double> input = {0.5, 0.2};
     ann::Propagator test_p(nn_test);
-    std::vector<double> test_run = test_p.AutoForwardPropagate(input);
+    ann::node_network test_run = test_p.AutoForwardPropagate(input);
 
-    for(double i : test_run)
+    for(int i = 0; i < (int)test_run.size(); i++)
     {
-        std::cout << "Final val: " << i << std::endl;
-        std::cout << "Activation function: " << test_p.ActivationFunction(i) << std::endl;
+        std::cout << "Layer " << i << ":\n";
+        for(int j = 0; j < (int)test_run.at(i).size(); j++)
+        {
+            std::cout << "--Node " << j << ": " << test_run.at(i).at(j) << std::endl;
+        }
+
     }
 
     return 0;

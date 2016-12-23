@@ -20,11 +20,7 @@ namespace ann
             ResetActivationFunction();
             ResetForwardPropagateFunction();
             ResetSmallChangeFunction();
-
-            this->backward_propagate = [&](std::function<double(const double&, const double&)> f)
-            {
-                return 0.5 * f(1.0,1.0) * 1;
-            };
+            ResetBackwardPropagateFunction();
         }
 
         void SetActivationFunction(std::function<double(const double&)> f);
@@ -35,7 +31,14 @@ namespace ann
         void ResetForwardPropagateFunction();
         double ForwardPropagate(int layer, int node, std::vector<double> input) const;
 
-        std::vector<double> AutoForwardPropagate(std::vector<double> input);
+        ann::node_network AutoForwardPropagate(std::vector<double> input);
+
+        void SetBackwardPropagateFunction(std::function<double(std::function<double(const double&, const double&)>, const double&, const double&, const double&)> backward_propagate);
+        void ResetBackwardPropagateFunction();
+        double BackwardPropagate(std::function<double(const double&, const double&)> s_change,
+                                 const double& _param_1,
+                                 const double& _param_2,
+                                 const double& net) const;
 
         void SetSmallChangeFunction(std::function<double(const double&, const double&)> f);
         void ResetSmallChangeFunction();
@@ -51,8 +54,9 @@ namespace ann
         ann::ANN nnetwork;
         std::function<double(const double&)> activation_function;
         std::function<double(int, int, std::vector<double>)> forward_propagate;
-        std::function<double(std::function<double(const double&, const double&)>    )> backward_propagate;
+        std::function<double(std::function<double(const double&, const double&)>, const double&, const double&, const double&)> backward_propagate;
         std::function<double(const double& target, const double& actual)> s_change;
+
     };
 }
 

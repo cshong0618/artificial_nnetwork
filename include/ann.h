@@ -15,13 +15,15 @@
 
 namespace ann
 {
+    typedef std::vector<double> node;
+    typedef std::vector<node> layer;
+    typedef std::vector<layer> network;
+
+    typedef std::vector<double> node_layer;
+    typedef std::vector<node_layer> node_network;
+
     class ANN
     {
-    private:
-        typedef std::vector<double> node;
-        typedef std::vector<node> layer;
-        typedef std::vector<layer> network;
-
     public:
 // Constructors
         ANN(int layers)
