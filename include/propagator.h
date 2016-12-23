@@ -16,38 +16,33 @@ namespace ann
         Propagator(ann::ANN nnetwork)
         {
             this->nnetwork = nnetwork;
-            this->activation_function = [](const double& net)
-            {
-                return (1 / (1 + exp(-net)));
-            };
 
-            this->forward_propagate = [&](int layer, int node, std::vector<double> inputs)
-            {
-                double net = 0.0;
+            ResetActivationFunction();
+            ResetForwardPropagateFunction();
+            ResetSmallChangeFunction();
 
-                try
-                {
-                    for(size_t i = 0; i < inputs.size(); i++)
-                    {
-                        net += (this->nnetwork.GetWeight(layer, node, i) * inputs.at(i));
-                    }
-                }
-                catch (std::exception e)
-                {
-                    throw e;
-                }
-                return net;
+            this->backward_propagate = [&](std::function<double(const double&, const double&)> f)
+            {
+                return 0.5 * f(1.0,1.0) * 1;
             };
         }
 
         void SetActivationFunction(std::function<double(const double&)> f);
+        void ResetActivationFunction();
         double ActivationFunction(const double& net) const;
 
-        void SetForwardPropogateFunction(std::function<double(int, int, std::vector<double>)> f);
+        void SetForwardPropagateFunction(std::function<double(int, int, std::vector<double>)> f);
+        void ResetForwardPropagateFunction();
         double ForwardPropagate(int layer, int node, std::vector<double> input) const;
 
+        std::vector<double> AutoForwardPropagate(std::vector<double> input);
+
+        void SetSmallChangeFunction(std::function<double(const double&, const double&)> f);
+        void ResetSmallChangeFunction();
+        double SmallChangeFunction(const double& target, const double& actual) const;
+
         void SetNNetwork(ann::ANN& nnetwork);
-        inline ann::ANN GetNNetwork() const
+        inline ann::ANN& GetNNetwork()
         {
             return nnetwork;
         }
@@ -56,6 +51,8 @@ namespace ann
         ann::ANN nnetwork;
         std::function<double(const double&)> activation_function;
         std::function<double(int, int, std::vector<double>)> forward_propagate;
+        std::function<double(std::function<double(const double&, const double&)>    )> backward_propagate;
+        std::function<double(const double& target, const double& actual)> s_change;
     };
 }
 

@@ -58,7 +58,7 @@ bool ann::ANN::SetWeight(int layer, int node, int n, const double& weight)
         {
             if(n >= 0 && n < (int)nnetwork.at(layer).at(node).size())
             {
-                nnetwork.at(layer).at(node).at(n) = weight;
+                this->nnetwork.at(layer).at(node).at(n) = weight;
                 return true;
             }
         }

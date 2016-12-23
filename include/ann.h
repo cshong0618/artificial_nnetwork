@@ -46,7 +46,7 @@ namespace ann
 
             sigmoid_function = [](const double& net)
             {
-                return (1 / 1 + (exp(-net)));
+                return (1 / (1 + (exp(-net))));
             };
         }
 
@@ -69,7 +69,7 @@ namespace ann
         bool AddWeight(int layer, int node, const double& weight);
         bool SetWeight(int layer, int node, int n, const double& weight);
 
-        inline std::vector<node> GetLayer(int layer) const
+        inline std::vector<node>& GetLayer(int layer)
         {
             if (layer >= 0 && layer < (int)nnetwork.size())
             {
@@ -81,7 +81,7 @@ namespace ann
             }
         }
 
-        inline std::vector<double> GetNode(int layer, int node)
+        inline std::vector<double>& GetNode(int layer, int node)
         {
             if(layer >= 0 && layer < (int)nnetwork.size())
             {
@@ -112,6 +112,11 @@ namespace ann
             {
                 throw std::range_error("Out of range");
             }
+        }
+
+        inline int GetLayerCount() const
+        {
+            return nnetwork.size();
         }
 
         void AddTrainingSet(const std::vector<double>& input, const std::vector<double>& output);
