@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/ann.cpp.o CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/main.cpp.o CMakeFiles/XOR_ANN.dir/home/shaong/Documents/Programming/xor_ann/src/propagator.cpp.o  -o XOR_ANN -rdynamic 

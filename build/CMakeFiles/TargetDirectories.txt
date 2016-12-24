@@ -1,3 +1,0 @@
-/home/shaong/Documents/Programming/xor_ann/build/CMakeFiles/rebuild_cache.dir
-/home/shaong/Documents/Programming/xor_ann/build/CMakeFiles/edit_cache.dir
-/home/shaong/Documents/Programming/xor_ann/build/CMakeFiles/XOR_ANN.dir
