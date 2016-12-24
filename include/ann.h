@@ -149,18 +149,40 @@ namespace ann
         inline double GetErrorMargin() const {return this->error_margin;}
 
         inline bool ErrorInMargin(const std::vector<double>& input,
-                                  const std::vector<double>& output) const
+                                  const std::vector<double> output) const
         {
-            std::vector<double> actual = GetTrainingSet(input);
+            std::vector<double> actual = this->GetTrainingSet(input);
+            std::cout << "--------------------------------------" << std::endl;
+            std::cout << "\tEntered error margin check"<<std::endl;
+            double output_total = 0;
+            double actual_total = 0;
+            double total_error_margin = this->error_margin * actual.size();
+            total_error_margin = this->error_margin;
             for(int i = 0; i < (int)actual.size(); i++)
             {
-                if(fabs(actual.at(i) - output.at(i)) > error_margin)
-                {
-                    return false;
-                }
+                actual_total += actual.at(i);
+                output_total += output.at(i);
             }
 
-            return true;
+            for(int i = 0; i < actual.size(); i++)
+            {
+                std::cout << "actual[" << i << "]: " << actual[i]
+                          << " output[" << i << "]: " << output[i] << std::endl;
+            }
+            double diff = fabs(actual_total - output_total);
+            double error_percentage = diff / actual_total;
+            std::cout << "error_percentage: " << error_percentage << " total_error_margin: " << total_error_margin << std::endl;
+            std::cin.ignore();
+            std::cout << "--------------------------------------" << std::endl;
+
+            if(error_percentage > total_error_margin)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         void SetLearningRate(const double& learning_rate);
@@ -173,7 +195,7 @@ namespace ann
 // Operators
         friend std::ostream& operator<<(std::ostream &os, const ANN& obj)
         {
-            os << std::fixed << std::setprecision(4) << "Network weights\n";
+            os << std::fixed << std::setprecision(8) << "Network weights\n";
 
             for(size_t i = 0; i < obj.nnetwork.size(); i++)
             {
@@ -190,7 +212,6 @@ namespace ann
 
             return os;
         }
-
 
     private:
         // Network data

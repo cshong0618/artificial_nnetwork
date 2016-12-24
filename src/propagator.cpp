@@ -9,7 +9,10 @@ void ann::Propagator::ResetActivationFunction()
 {
     this->activation_function = [](const double& net)
     {
-        return (1 / (1 + exp(-net)));
+        //std::cout << "\tnet: " << net << std::endl;
+        double ac_f = (1 / (1 + exp(-net)));
+        //std::cout << "\tac_f: " << ac_f << std::endl;
+        return ac_f;
     };
 }
 
@@ -29,17 +32,22 @@ void ann::Propagator::ResetForwardPropagateFunction()
     {
         double net = 0.0;
 
-        try
+        for(size_t i = 0; i < inputs.size(); i++)
         {
-            for(size_t i = 0; i < inputs.size(); i++)
-            {
-                net += (this->nnetwork.GetWeight(layer, node, i) * inputs.at(i));
-            }
+            net += (this->nnetwork.GetWeight(layer, node, i) * inputs.at(i));
+            std::cout << "\tnet at " << layer << " " << node << " " << i << ": " << net << "\n";
         }
-        catch (std::exception e)
+
+
+        if(net == 0.0)
         {
-            throw e;
+            net = 1;
         }
+
+
+
+        std::cout << "\t\tfinal net: " << net << "\n";
+
         return net;
     };
 }
@@ -52,14 +60,17 @@ double ann::Propagator::ForwardPropagate(int layer, int node, std::vector<double
 ann::node_network ann::Propagator::AutoForwardPropagate(std::vector<double> input)
 {
     ann::node_network temp;
+    temp.push_back(ann::node_layer());
+    temp.at(0) = input;
     for(int i = 0; i < nnetwork.GetLayerCount(); i++)
     {
         temp.push_back(ann::node_layer());
         for(int j = 0; j < nnetwork.GetLayer(i).size(); j++)
         {
-            temp.at(i).push_back(nnetwork.ForwardPropagate(i, j, input));
+            temp.at(i + 1).push_back(this->ForwardPropagate(i, j, input));
+            std::cout << "temp.at(" << i + 1 << ").at(" << j << "): " << temp.at(i+1).at(j) << std::endl;
         }
-        input = temp.at(i);
+        input = temp.at(i + 1);
     }
 
     return temp;
@@ -92,7 +103,8 @@ ann::network ann::Propagator::AutoBackwardPropagate(const ann::node_network& net
     */
     ann::ANN initial_network = this->GetNNetwork();
     ann::network delta = initial_network.GetRawNNetwork();
-    std::cout << "Learning rate: " << this->nnetwork.GetLearningRate() << std::endl;
+    ann::network small_changes = delta;
+    //std::cout << "Learning rate: " << this->nnetwork.GetLearningRate() << std::endl;
     /*
         Straight run preparation
     */
@@ -102,43 +114,100 @@ ann::network ann::Propagator::AutoBackwardPropagate(const ann::node_network& net
     {
         for(int j = 0; j < initial_network.GetNode(last, i).size(); j++)
         {
-            std::cout << "lbp " << j << "\n";
-            std::cout << "initial_network.GetWeight(last, i, j): " << initial_network.GetWeight(last, i, j) <<std::endl;
-            double sc = this->SmallChangeFunction(target.at(i), initial_network.GetWeight(last, i, j));
-            std::cout << "sc: " << sc << std::endl;
-            double val = this->BackwardPropagate(sc, nets.at(last).at(i));
-            std::cout << "val: " << val << std::endl;
+            //std::cout << "lbp " << j << "\n";
+            //std::cout << "target.at(i): " << target.at(i) << std::endl;
+            //std::cout << "initial_network.GetWeight(last, i, j): " << initial_network.GetWeight(last, i, j) <<std::endl;
+            double sc = this->SmallChangeFunction(target.at(i), nets.at(last - 1).at(i));
+            small_changes.at(last).at(i).at(j) = sc;
+            //std::cout << "sc: " << sc << std::endl;
+            // std::cout << "nets.at(last-1).at(i): " << nets.at(last).at(j) << std::endl;
+            // std::cin.ignore();
+            double val = this->BackwardPropagate(sc, nets.at(last).at(j));
+            //std::cout << "val: " << val << std::endl;
             delta.at(last).at(i).at(j) = val;
         }
     }
 
     for(int i = last - 1; i >= 0; --i)
     {
-        std::cout << "Layer count: " << initial_network.GetLayerCount() << std::endl;
+        //std::cout << "Layer count: " << initial_network.GetLayerCount() << std::endl;
         for(int j = 0; j < initial_network.GetLayer(i).size(); j++)
         {
-            std::cout << "GetLayer size: " << initial_network.GetLayer(i).size() << "\n";
+            //std::cout << "GetLayer size: " << initial_network.GetLayer(i).size() << "\n";
             for(int k = 0; k < initial_network.GetNode(i, j).size(); k++)
             {
-                std::cout << "GetNode size: " << initial_network.GetNode(i, j).size() << "\n";
-                std::cout << "i: " << i << " j: " << j << " k: " << k << "\n";
+                //std::cout << "GetNode size: " << initial_network.GetNode(i, j).size() << "\n";
+                //std::cout << "i: " << i << " j: " << j << " k: " << k << "\n";
                 double sc;
-                sc = this->HiddenSmallChangeFunction(delta.at(i + 1).at(j), initial_network.GetNode(i,j), nets.at(i).at(j));
-                std::cout << "sc: " << sc << std::endl;
+                std::vector<double> prev_small_change;
+                std::vector<double> prev_weight;
+                for(int _i = 0; _i < delta.at(i + 1).size(); _i++)
+                {
+                    prev_small_change.push_back(small_changes.at(i + 1).at(_i).at(j));
+                    prev_weight.push_back(initial_network.GetWeight(i + 1, _i, j));
+                }
 
-                double val = this->BackwardPropagate(sc, nets.at(i).at(j));
-                std::cout << "val: " << val << std::endl;
+                sc = this->HiddenSmallChangeFunction(prev_small_change, prev_weight, nets.at(i).at(j));
+                // std::cout << "sc: " << sc << std::endl;
+
+                small_changes.at(i).at(j).at(k) = sc;
+                // std::cout << "nets.at...: " << nets.at(i).at(k) << std::endl;
+                // std::cin.ignore();
+                double val = this->BackwardPropagate(sc, nets.at(i).at(k));
+                // std::cout << "val: " << val << std::endl;
                 delta.at(i).at(j).at(k) = val;
             }
-
-            this->SetSmallChangeFunction([&](const double& param_1, const double& param_2)
-            {
-                return 1;
-            });
         }
     }
 
-    return delta;
+    std::cout << initial_network << std::endl;
+
+    for(int i = 0; i < initial_network.GetLayerCount(); i++)
+    {
+        for(int j = 0; j < initial_network.GetLayer(i).size(); j++)
+        {
+            for(int k = 0; k < initial_network.GetNode(i, j).size(); k++)
+            {
+                // std::cout << small_changes.at(i).at(j).at(k) << std::endl;
+                double new_weight = 0.0;
+
+                // Hack for bias where it do not have previous weights
+                if(initial_network.GetWeight(i, j, k) != 0)
+                {
+                    new_weight = initial_network.GetWeight(i, j, k) + delta.at(i).at(j).at(k);
+                }
+
+                initial_network.SetWeight(i, j, k, new_weight);
+            }
+        }
+    }
+
+    std::cout << "Small changes:\n";
+    for(int i = 0; i < initial_network.GetLayerCount(); i++)
+    {
+        for(int j = 0; j < initial_network.GetLayer(i).size(); j++)
+        {
+            for(int k = 0; k < initial_network.GetNode(i, j).size(); k++)
+            {
+                std::cout << small_changes.at(i).at(j).at(k) << std::endl;
+            }
+        }
+    }
+    std::cout << "\nDelta:\n";
+    for(int i = 0; i < initial_network.GetLayerCount(); i++)
+    {
+        for(int j = 0; j < initial_network.GetLayer(i).size(); j++)
+        {
+            for(int k = 0; k < initial_network.GetNode(i, j).size(); k++)
+            {
+                std::cout << delta.at(i).at(j).at(k) << std::endl;
+            }
+        }
+    }
+
+    std::cout << initial_network << std::endl;
+
+    return initial_network.GetRawNNetwork();
 }
 
 void ann::Propagator::SetSmallChangeFunction(std::function<double(const double&, const double&)> f)
@@ -151,7 +220,8 @@ void ann::Propagator::ResetSmallChangeFunction()
     this->s_change = [&](const double& target, const double& actual)
     {
         double a = activation_function(actual);
-        return ((target - a) * a * (1 - a));
+        double small_change = (double)((target - a) * a * (1 - a));
+        return small_change;
     };
 }
 
@@ -174,8 +244,8 @@ void ann::Propagator::ResetHiddenSmallChangeFunction()
         {
             change += (prev_small_change.at(i) * weight.at(i));
         }
-        change *= (actual * (1 - actual));
-        std::cout << "\tchange: " << change << std::endl;
+        double a = activation_function(actual);
+        change *= (a * (1 - a));
         return change;
     };
 }
