@@ -21,6 +21,7 @@ namespace ann
             ResetForwardPropagateFunction();
             ResetSmallChangeFunction();
             ResetBackwardPropagateFunction();
+            ResetHiddenSmallChangeFunction();
         }
 
         void SetActivationFunction(std::function<double(const double&)> f);
@@ -33,16 +34,19 @@ namespace ann
 
         ann::node_network AutoForwardPropagate(std::vector<double> input);
 
-        void SetBackwardPropagateFunction(std::function<double(std::function<double(const double&, const double&)>, const double&, const double&, const double&)> backward_propagate);
+        void SetBackwardPropagateFunction(std::function<double(const double&, const double&)> backward_propagate);
         void ResetBackwardPropagateFunction();
-        double BackwardPropagate(std::function<double(const double&, const double&)> s_change,
-                                 const double& _param_1,
-                                 const double& _param_2,
-                                 const double& net) const;
+        double BackwardPropagate(const double& s_change, const double& net) const;
+        ann::network AutoBackwardPropagate(const ann::node_network& nets, std::vector<double> target);
+
 
         void SetSmallChangeFunction(std::function<double(const double&, const double&)> f);
         void ResetSmallChangeFunction();
         double SmallChangeFunction(const double& target, const double& actual) const;
+
+        void SetHiddenSmallChangeFunction(std::function<double(std::vector<double>, std::vector<double>, const double&)> hidden_s_change);
+        void ResetHiddenSmallChangeFunction();
+        double HiddenSmallChangeFunction(std::vector<double> prev_small_change, std::vector<double> weights, const double& actual) const;
 
         void SetNNetwork(ann::ANN& nnetwork);
         inline ann::ANN& GetNNetwork()
@@ -54,8 +58,9 @@ namespace ann
         ann::ANN nnetwork;
         std::function<double(const double&)> activation_function;
         std::function<double(int, int, std::vector<double>)> forward_propagate;
-        std::function<double(std::function<double(const double&, const double&)>, const double&, const double&, const double&)> backward_propagate;
+        std::function<double(const double&, const double&)> backward_propagate;
         std::function<double(const double& target, const double& actual)> s_change;
+        std::function<double(std::vector<double>, std::vector<double>, const double&)> hidden_s_change;
 
     };
 }

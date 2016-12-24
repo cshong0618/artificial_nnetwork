@@ -67,6 +67,11 @@ bool ann::ANN::SetWeight(int layer, int node, int n, const double& weight)
     return false;
 }
 
+void ann::ANN::SetRawNNetwork(const ann::network& nnetwork)
+{
+    this->nnetwork = nnetwork;
+}
+
 void ann::ANN::AddTrainingSet(const std::vector<double>& input,
                               const std::vector<double>& output)
 {

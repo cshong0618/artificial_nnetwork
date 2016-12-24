@@ -5,5 +5,5 @@
 ./src/*.o
 *.gch
 *.o
-./build/*
+./build/
 !./build/CMakeLists.txt

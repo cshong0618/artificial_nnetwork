@@ -70,6 +70,7 @@ namespace ann
         bool AddNode(int layer);
         bool AddWeight(int layer, int node, const double& weight);
         bool SetWeight(int layer, int node, int n, const double& weight);
+        void SetRawNNetwork(const ann::network& nnetwork);
 
         inline std::vector<node>& GetLayer(int layer)
         {
@@ -119,6 +120,12 @@ namespace ann
         inline int GetLayerCount() const
         {
             return nnetwork.size();
+        }
+
+
+        inline ann::network GetRawNNetwork() const
+        {
+            return nnetwork;
         }
 
         void AddTrainingSet(const std::vector<double>& input, const std::vector<double>& output);
