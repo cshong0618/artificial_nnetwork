@@ -179,7 +179,7 @@ namespace ann
                                   const std::vector<double> output) const
         {
             std::vector<double> actual = this->GetTrainingSet(input);
-            std::cout << "--------------------------------------" << std::endl;
+            std::cout << std::fixed << std::setprecision(12) << "--------------------------------------" << std::endl;
             std::cout << "\tEntered error margin check"<<std::endl;
 
             double output_total = 0;

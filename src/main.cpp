@@ -30,9 +30,31 @@ int main()
     nn_test.AddWeight(1, 1, 0.45);
     nn_test.AddWeight(1, 1, 0.55);
     nn_test.AddWeight(1, 1, 0.60);
+    nn_test.AddNode(1);
+    nn_test.AddWeight(1, 2, 0);
+    nn_test.AddWeight(1, 2, 0);
+    nn_test.AddWeight(1, 2, 0);
 
-    nn_test.SetLearningRate(0.5);
-    nn_test.SetErrorMargin(0.0001);
+    nn_test.AddLayer();
+    nn_test.AddNode(2);
+    nn_test.AddWeight(2, 0, 0.40);
+    nn_test.AddWeight(2, 0, 0.50);
+    nn_test.AddWeight(2, 0, 0.60);
+    nn_test.AddNode(2);
+    nn_test.AddWeight(2, 1, 0.45);
+    nn_test.AddWeight(2, 1, 0.55);
+    nn_test.AddWeight(2, 1, 0.60);
+
+    nn_test.AddLayer();
+    nn_test.AddNode(3);
+    nn_test.AddWeight(3, 0, 0.20);
+    nn_test.AddWeight(3, 0, 0.20);
+    nn_test.AddNode(3);
+    nn_test.AddWeight(3, 1, 0.25);
+    nn_test.AddWeight(3, 1, 0.25);
+
+    nn_test.SetLearningRate(0.1);
+    nn_test.SetErrorMargin(0.000001);
 
     std::vector<ann::node> nodes = {{0.5, 'n'}, {0.1,'n'}, {1, 'b'}};
     std::vector<double> input = {0.05, 0.1, 1};
@@ -68,6 +90,7 @@ int main()
     unsigned int counter = 0;
     do
     {
+        std::cout << "Run: " << counter << std::endl;
         v.clear();
         ann::raw_node_network test_run = test_p.RawAutoForwardPropagate(input);
 
