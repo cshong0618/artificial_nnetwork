@@ -182,8 +182,6 @@ namespace ann
             std::cout << std::fixed << std::setprecision(12) << "--------------------------------------" << std::endl;
             std::cout << "\tEntered error margin check"<<std::endl;
 
-            double output_total = 0;
-            double actual_total = 0;
             double total_error_margin = this->error_margin * actual.size();
             total_error_margin = this->error_margin;
             // for(int i = 0; i < (int)actual.size(); i++)
@@ -223,10 +221,6 @@ namespace ann
         void SetLearningRate(const double& learning_rate);
         inline double GetLearningRate() const {return this->learning_rate;}
 
-        double ForwardPropagate(int layer, int node, std::vector<double> inputs);
-        double FinalBackwardPropagate(double net, double actual, double target);
-        void BackwardPropagate();
-        double BackwardPropagate(int layer, int node, double p_net, double actual);
 // Operators
         friend std::ostream& operator<<(std::ostream &os, const ANN& obj)
         {
@@ -260,8 +254,6 @@ namespace ann
 
         // Calculation functions
         std::function<double(const double& net)> sigmoid_function;
-        std::function<double(const double& weight)> output_update_function;
-        std::function<double(const double& weight)> hidden_update_function;
 
         // Others
         std::string weight_filename;
