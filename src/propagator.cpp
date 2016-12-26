@@ -113,7 +113,7 @@ void ann::Propagator::ResetRawForwardPropagateFunction()
 
 
 
-        std::cout << "\t\tfinal net: " << net << "\n";
+        // std::cout << "\t\tfinal net: " << net << "\n";
 
         return _node;
     };
@@ -127,20 +127,15 @@ struct ann::node ann::Propagator::RawForwardPropagate(int layer, int node, std::
 ann::node_network ann::Propagator::AutoForwardPropagate(std::vector<double> input)
 {
     ann::node_network temp;
-    ann::raw_node_network r_temp;
     temp.push_back(ann::node_layer());
-    r_temp.push_back(ann::raw_node_layer());
     temp.at(0) = input;
-    r_temp.at(0) = this->GetNNetwork().GetRawNode();
     for(size_t i = 0; i < nnetwork.GetLayerCount(); i++)
     {
         temp.push_back(ann::node_layer());
-        r_temp.push_back(ann::raw_node_layer());
         for(size_t j = 0; j < nnetwork.GetLayer(i).size(); j++)
         {
             double new_net = this->ForwardPropagate(i, j, input);
             temp.at(i + 1).push_back(new_net);
-            r_temp.at(i + 1).push_back(this->RawForwardPropagate(i, j, input));
             std::cout << "temp.at(" << i + 1 << ").at(" << j << "): " << temp.at(i+1).at(j) << std::endl;
         }
         input = temp.at(i + 1);
@@ -433,7 +428,7 @@ ann::network ann::Propagator::RawAutoBackwardPropagate(const ann::raw_node_netwo
         }
     }
 
-    std::cout << initial_network << std::endl;
+    // std::cout << initial_network << std::endl;
 
     for(size_t i = 0; i < initial_network.GetLayerCount(); i++)
     {
@@ -478,7 +473,7 @@ ann::network ann::Propagator::RawAutoBackwardPropagate(const ann::raw_node_netwo
     //     }
     // }
 
-    std::cout << initial_network << std::endl;
+    // std::cout << initial_network << std::endl;
 
     return initial_network.GetRawNNetwork();
 }

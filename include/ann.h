@@ -195,14 +195,14 @@ namespace ann
             for(size_t i = 0; i < actual.size(); i++)
             {
                 std::cout << "actual[" << i << "]: " << actual[i]
-                          << " output[" << i << "]: " << output[i] << std::endl;
+                          << " output[" << i << "]: " << ActivationValue(output[i]) << std::endl;
             }
             // double diff = fabs(actual_total - output_total);
             // double error_percentage = diff / actual_total;
             double error_percentage = 1.0;
             for(size_t i = 0; i < actual.size(); i++)
             {
-                error_percentage *= (1 / fabs(actual.at(i) - output.at(i)) / actual.at(i));
+                error_percentage *= (fabs(actual.at(i) - ActivationValue(output.at(i))) / actual.at(i));
             }
 
 

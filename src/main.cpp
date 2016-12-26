@@ -32,11 +32,28 @@ int main()
     nn_test.AddWeight(1, 1, 0.60);
 
     nn_test.SetLearningRate(0.5);
-    nn_test.SetErrorMargin(0.2);
+    nn_test.SetErrorMargin(0.0001);
 
     std::vector<ann::node> nodes = {{0.5, 'n'}, {0.1,'n'}, {1, 'b'}};
     std::vector<double> input = {0.05, 0.1, 1};
     std::vector<double> target = {0.01, 0.99};
+
+    // nn_test.AddNode(0);
+    // nn_test.AddWeight(0,0, 1);
+    // nn_test.AddWeight(0,0, 0);
+    // nn_test.AddNode(0);
+    // nn_test.AddWeight(0, 1, 1);
+    // nn_test.AddWeight(0, 1, 0);
+    // nn_test.AddLayer();
+    // nn_test.AddNode(1);
+    // nn_test.AddWeight(1, 0, 0.8);
+    // nn_test.AddWeight(1, 0, 0.2);
+    // nn_test.SetLearningRate(0.1);
+    // nn_test.SetErrorMargin(0.01);
+    // std::vector<ann::node> nodes = {{1, 'n'}, {0, 'n'}};
+    // std::vector<double> input = {1, 0};
+    // std::vector<double> target = {1};
+
     nn_test.AddTrainingSet(input, target);
     nn_test.SetRawNode(nodes);
     ann::Propagator test_p(nn_test);
