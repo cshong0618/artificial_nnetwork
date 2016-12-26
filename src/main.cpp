@@ -33,9 +33,12 @@ int main()
 
     nn_test.SetLearningRate(0.5);
     nn_test.SetErrorMargin(0.2);
+
+    std::vector<ann::node> nodes = {{0.5, 'n'}, {0.1,'n'}, {1, 'b'}};
     std::vector<double> input = {0.05, 0.1, 1};
     std::vector<double> target = {0.01, 0.99};
     nn_test.AddTrainingSet(input, target);
+    nn_test.SetRawNode(nodes);
     ann::Propagator test_p(nn_test);
     //ann::node_network test_run = test_p.AutoForwardPropagate(input);
     ann::node_network test_run;
@@ -48,20 +51,27 @@ int main()
     unsigned int counter = 0;
     do
     {
-        ann::node_network test_run = test_p.AutoForwardPropagate(input);
+        v.clear();
+        ann::raw_node_network test_run = test_p.RawAutoForwardPropagate(input);
 
-        for(int i = 0; i < test_run.size(); i++)
+        // for(size_t i = 0; i < test_run.size(); i++)
+        // {
+        //     std::cout << "Layer " << i << ":\n";
+        //     for(size_t j = 0; j < test_run.at(i).size(); j++)
+        //     {
+        //         std::cout << "\tNode " << j << ": " << test_run.at(i).at(j).val << std::endl;
+        //     }
+        // }
+
+        test_p.GetNNetwork().SetRawNNetwork(test_p.RawAutoBackwardPropagate(test_run, target));
+        // std::cout << test_p.GetNNetwork() << std::endl;
+        // v = test_run.back();
+        for(auto n : test_run.back())
         {
-            std::cout << "Layer " << i << ":\n";
-            for(int j = 0; j < test_run.at(i).size(); j++)
-            {
-                std::cout << "\tNode " << j << ": " << test_run.at(i).at(j) << std::endl; 
-            }
+            // std::cout << n.val << std::endl;
+            v.push_back(n.val);
         }
 
-        test_p.GetNNetwork().SetRawNNetwork(test_p.AutoBackwardPropagate(test_run, target));
-        // std::cout << test_p.GetNNetwork() << std::endl;
-        v = test_run.back();
         counter++;
     }while(nn_test.ErrorInMargin(input, v) ? [&](int a){counter++;return true;}(counter) : [&](int a){return false;}(counter));
 

@@ -15,12 +15,21 @@
 
 namespace ann
 {
-    typedef std::vector<double> node;
-    typedef std::vector<node> layer;
-    typedef std::vector<layer> network;
+    struct node
+    {
+        double val;
+        char type;
+    };
+
+    typedef std::vector<double> t_weight;
+    typedef std::vector<t_weight> t_layer;
+    typedef std::vector<t_layer> network;
 
     typedef std::vector<double> node_layer;
     typedef std::vector<node_layer> node_network;
+
+    typedef std::vector<struct node> raw_node_layer;
+    typedef std::vector<raw_node_layer> raw_node_network;
 
     class ANN
     {
@@ -72,7 +81,7 @@ namespace ann
         bool SetWeight(int layer, int node, int n, const double& weight);
         void SetRawNNetwork(const ann::network& nnetwork);
 
-        inline std::vector<node>& GetLayer(int layer)
+        inline t_layer& GetLayer(int layer)
         {
             if (layer >= 0 && layer < (int)nnetwork.size())
             {
@@ -117,7 +126,7 @@ namespace ann
             }
         }
 
-        inline int GetLayerCount() const
+        inline size_t GetLayerCount() const
         {
             return nnetwork.size();
         }
@@ -126,6 +135,12 @@ namespace ann
         inline ann::network GetRawNNetwork() const
         {
             return nnetwork;
+        }
+
+        void SetRawNode(const std::vector<struct node>& input);
+        inline std::vector<struct node> GetRawNode() const
+        {
+            return this->raw_node;
         }
 
         void AddTrainingSet(const std::vector<double>& input, const std::vector<double>& output);
@@ -141,6 +156,18 @@ namespace ann
             }
         }
 
+        void AddTrainingSet(const std::vector<node>& input, const std::vector<double>& output);
+        inline std::vector<double> GetTrainingSet(const std::vector<node>&key) const
+        {
+            std::vector<double> temp;
+            for(auto n : key)
+            {
+                temp.push_back(n.val);
+            }
+
+            return this->GetTrainingSet(temp);
+        }
+
         void SetActivationFunction(std::function<double(const double& net)> f);
         double ActivationValue(const double& net) const;
 
@@ -154,25 +181,33 @@ namespace ann
             std::vector<double> actual = this->GetTrainingSet(input);
             std::cout << "--------------------------------------" << std::endl;
             std::cout << "\tEntered error margin check"<<std::endl;
+
             double output_total = 0;
             double actual_total = 0;
             double total_error_margin = this->error_margin * actual.size();
             total_error_margin = this->error_margin;
-            for(int i = 0; i < (int)actual.size(); i++)
-            {
-                actual_total += actual.at(i);
-                output_total += output.at(i);
-            }
-
-            for(int i = 0; i < actual.size(); i++)
+            // for(int i = 0; i < (int)actual.size(); i++)
+            // {
+            //     actual_total += actual.at(i);
+            //     output_total += output.at(i);
+            // }
+            //
+            for(size_t i = 0; i < actual.size(); i++)
             {
                 std::cout << "actual[" << i << "]: " << actual[i]
                           << " output[" << i << "]: " << output[i] << std::endl;
             }
-            double diff = fabs(actual_total - output_total);
-            double error_percentage = diff / actual_total;
+            // double diff = fabs(actual_total - output_total);
+            // double error_percentage = diff / actual_total;
+            double error_percentage = 1.0;
+            for(size_t i = 0; i < actual.size(); i++)
+            {
+                error_percentage *= (1 / fabs(actual.at(i) - output.at(i)) / actual.at(i));
+            }
+
+
             std::cout << "error_percentage: " << error_percentage << " total_error_margin: " << total_error_margin << std::endl;
-            std::cin.ignore();
+            // std::cin.ignore();
             std::cout << "--------------------------------------" << std::endl;
 
             if(error_percentage > total_error_margin)
@@ -217,7 +252,8 @@ namespace ann
         // Network data
         network nnetwork;
         std::map<std::vector<double>, std::vector<double>> training_set;
-
+        std::map<std::vector<node>, std::vector<double>> _training_set;
+        std::vector<struct node> raw_node;
         // Calculation data
         double learning_rate;
         double error_margin;

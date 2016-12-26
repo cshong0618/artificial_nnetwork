@@ -5,7 +5,7 @@
 */
 void ann::ANN::AddLayer()
 {
-    layer l;
+    t_layer l;
     nnetwork.push_back(l);
 }
 
@@ -17,7 +17,7 @@ bool ann::ANN::AddNode(int layer)
 {
     if(layer >= 0 && layer < (int)nnetwork.size())
     {
-        node n;
+        t_weight n;
         nnetwork.at(layer).push_back(n);
         return true;
     }
@@ -72,10 +72,27 @@ void ann::ANN::SetRawNNetwork(const ann::network& nnetwork)
     this->nnetwork = nnetwork;
 }
 
+void ann::ANN::SetRawNode(const std::vector<struct node>& input)
+{
+    this->raw_node = input;
+}
+
 void ann::ANN::AddTrainingSet(const std::vector<double>& input,
                               const std::vector<double>& output)
 {
     this->training_set[input] = output;
+}
+
+void ann::ANN::AddTrainingSet(const std::vector<node>& input,
+                              const std::vector<double>& output)
+{
+    std::vector<double> temp;
+    for(auto n : input)
+    {
+        temp.push_back(n.val);
+    }
+
+    this->AddTrainingSet(temp, output);
 }
 
 /*
